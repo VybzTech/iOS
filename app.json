@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "UG",
-    "slug": "UG",
+    "slug": "urban-gravity",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -43,6 +43,13 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "fda62561-c299-4702-979a-36388fc57502"
+      }
+    },
+    "owner": "dharvo"
   }
 }

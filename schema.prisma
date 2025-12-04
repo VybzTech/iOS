@@ -1,0 +1,137 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(uuid())
+  email         String?   @unique
+  phone         String?   @unique
+  passwordHash  String?
+  displayName   String?
+  role          UserRole  @default(TENANT)
+  isVerified    Boolean   @default(false)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  profile       Profile?
+  listings      Listing[] @relation("ownerListings")
+  favorites     Favorite[]
+  matches       Match[]
+  subscriptions Subscription[]
+}
+
+enum UserRole {
+  TENANT
+  LANDLORD
+  AGENT
+  OFFICER_USER
+  OFFICER_ADMIN
+  OFFICER_SUPERADMIN
+}
+
+model Profile {
+  id        String  @id @default(uuid())
+  userId    String  @unique
+  user      User    @relation(fields: [userId], references: [id])
+  firstName String?
+  lastName  String?
+  dob       DateTime?
+  nin       String?
+  bvn       String?
+  address   String?
+  city      String?
+  gender    String?
+  imageUrl  String?
+}
+
+model Listing {
+  id          String     @id @default(uuid())
+  ownerId     String
+  owner       User       @relation(fields: [ownerId], references: [id], name: "ownerListings")
+  title       String
+  description String
+  price       Float
+  currency    String     @default("NGN")
+  type        ListingType
+  status      ListingStatus @default(ACTIVE)
+  latitude    Float?
+  longitude   Float?
+  address     String?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  media       Media[]    @relation("listingMedia")
+}
+
+enum ListingType {
+  RENT
+  SALE
+  SHORT_LET
+}
+
+enum ListingStatus {
+  ACTIVE
+  PENDING
+  ARCHIVED
+  VERIFIED
+}
+
+model Media {
+  id         String   @id @default(uuid())
+  listingId  String?
+  listing    Listing? @relation(fields: [listingId], references: [id])
+  url        String
+  type       MediaType
+  meta       Json?
+  createdAt  DateTime @default(now())
+}
+
+enum MediaType {
+  IMAGE
+  PANORAMA
+  VIDEO
+}
+
+model Favorite {
+  id        String  @id @default(uuid())
+  userId    String
+  user      User    @relation(fields: [userId], references: [id])
+  listingId String
+  createdAt DateTime @default(now())
+}
+
+model Match {
+  id         String  @id @default(uuid())
+  userId     String
+  listingId  String
+  status     MatchStatus @default(LIKED)
+  createdAt  DateTime @default(now())
+}
+
+enum MatchStatus {
+  LIKED
+  DISCARDED
+  MATCHED
+}
+
+model Message {
+  id            String   @id @default(uuid())
+  conversation  String
+  senderId      String
+  recipientId   String
+  body          String
+  attachments   Json?
+  createdAt     DateTime @default(now())
+}
+
+model Subscription {
+  id        String   @id @default(uuid())
+  userId    String
+  plan      String
+  startsAt  DateTime
+  endsAt    DateTime
+  active    Boolean  @default(true)
+}

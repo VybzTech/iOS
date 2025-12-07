@@ -13,7 +13,7 @@
     "build:android": "eas build --platform android"
   },
   "dependencies": {
-    "@clerk/clerk-expo": "^2.19.8",
+    "@clerk/clerk-expo": "^2.19.9",
     "@expo/vector-icons": "^15.0.3",
     "@react-navigation/bottom-tabs": "^7.4.0",
     "@react-navigation/elements": "^2.6.3",
@@ -30,7 +30,7 @@
     "expo-linking": "~8.0.9",
     "expo-notifications": "^0.32.13",
     "expo-router": "~6.0.15",
-    "expo-secure-store": "^13.0.0",
+    "expo-secure-store": "^13.0.2",
     "expo-splash-screen": "~31.0.11",
     "expo-status-bar": "~3.0.8",
     "expo-symbols": "~1.0.7",

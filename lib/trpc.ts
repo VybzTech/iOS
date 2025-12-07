@@ -2,7 +2,7 @@ import { createTRPCReact } from '@trpc/react-query';
 import { httpBatchLink } from '@trpc/client';
 import { QueryClient } from '@tanstack/react-query';
 import * as SecureStore from 'expo-secure-store';
-import type { AppRouter } from '../../../Server/src/database/routers/index.js';
+import type { AppRouter } from '../../server/src/database/routers/index.js';
 
 export const trpc = createTRPCReact<AppRouter>();
 
@@ -15,6 +15,7 @@ export const queryClient = new QueryClient({
     },
   },
 });
+
 
 export const trpcLink = httpBatchLink({
   url: `${process.env.EXPO_PUBLIC_API_URL}/api/trpc`,
@@ -30,14 +31,34 @@ export const trpcLink = httpBatchLink({
   },
 });
 
+// export const trpcClient = trpc.createClient({
+//   links: [trpcLink],
+// });
+
 export const trpcClient = trpc.createClient({
-  links: [trpcLink],
+  links: [
+    httpBatchLink({
+      url: `${process.env.EXPO_PUBLIC_API_URL}/api/trpc`,
+      async headers() {
+        try {
+          const token = await SecureStore.getItemAsync('jwt_token');
+          return {
+            authorization: token ? `Bearer ${token}` : '',
+          };
+        } catch (err) {
+          console.error('🔴 Error getting token:', err);
+          return {};
+        }
+      },
+    }),
+  ],
 });
 
 
 
 
 /**
+ * 
  * 
  * 
  * import { createTRPCReact } from '@trpc/react-query';

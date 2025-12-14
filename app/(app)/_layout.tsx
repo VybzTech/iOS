@@ -33,39 +33,60 @@
 //   );
 // }
 
+// import { useEffect } from 'react';
+// import { Stack } from 'expo-router';
+// import { useRouter } from 'expo-router';
+// import { useAuth } from '@clerk/clerk-expo';
 
-import { useEffect } from 'react';
-import { Stack } from 'expo-router';
-import { useRouter } from 'expo-router';
-import { useAuth } from '@clerk/clerk-expo';
+// export default function AppLayout() {
+//   const { isSignedIn, isLoaded } = useAuth();
+//   const router = useRouter();
+//   console.log('🔍 Clerk isLoaded:', isLoaded);
+//   console.log('🔑 Clerk Key:', process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY);
+
+//   useEffect(() => {
+//     if (isLoaded && !isSignedIn) {
+//       router.replace('/(auth)/login');
+//     }
+//   }, [isLoaded, isSignedIn]);
+
+//   if (!isLoaded) {
+//     return null;
+//   }
+
+//   if (!isSignedIn) {
+//     return null;
+//   }
+
+//   return (
+//     <Stack screenOptions={{ headerShown: false }}>
+//       <Stack.Screen name="(tenant)" />
+//       <Stack.Screen name="settings" />
+//     </Stack>
+//   );
+// }
+
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import HomeScreen from "./home";
+import SecuritySettingsScreen from "../settings/security";
+
+const Stack = createNativeStackNavigator();
 
 export default function AppLayout() {
-  const { isSignedIn, isLoaded } = useAuth();
-  const router = useRouter();
-  console.log('🔍 Clerk isLoaded:', isLoaded);
-  console.log('🔑 Clerk Key:', process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY);
-
-  useEffect(() => {
-    if (isLoaded && !isSignedIn) {
-      router.replace('/(auth)/login');
-    }
-  }, [isLoaded, isSignedIn]);
-
-  if (!isLoaded) {
-    return null;
-  }
-
-  if (!isSignedIn) {
-    return null;
-  }
-
- 
-  
-
   return (
-    <Stack screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="(tenant)" />
-      <Stack.Screen name="settings" />
-    </Stack>
+    <Stack.Navigator>
+      <Stack.Screen
+        name="home"
+        component={HomeScreen}
+        options={{ title: "Home" }}
+      />
+      <Stack.Screen
+        name="settings"
+        component={SecuritySettingsScreen}
+        options={{ title: "settings" }}
+      />
+    </Stack.Navigator>
   );
 }
+
+

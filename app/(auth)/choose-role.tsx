@@ -1,3 +1,93 @@
+/***
+ * 
+ * 
+ * 
+ * import { useState } from 'react';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  ScrollView,
+  ActivityIndicator,
+} from 'react-native';
+import { useAuthContext } from '@/context/AuthContext';
+
+const ROLES = [
+  { id: 'TENANT', label: 'Looking for a place', icon: '🏠' },
+  { id: 'LANDLORD', label: 'Renting out property', icon: '🏢' },
+];
+
+export default function ChooseRoleScreen() {
+  const { selectRole } = useAuthContext();
+  const [selectedRole, setSelectedRole] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  const handleSelectRole = async () => {
+    if (!selectedRole) return;
+
+    try {
+      setLoading(true);
+      setError('');
+      await selectRole([selectedRole]);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to select role');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <ScrollView className="flex-1 bg-white px-4 py-8">
+      <Text className="text-2xl font-bold mb-2">Who are you?</Text>
+      <Text className="text-gray-600 mb-6">
+        Tell us your role so we can customize your experience
+      </Text>
+
+      {error && (
+        <View className="bg-red-100 p-3 rounded-lg mb-4">
+          <Text className="text-red-800">{error}</Text>
+        </View>
+      )}
+
+      <View className="gap-4 mb-8">
+        {ROLES.map((role) => (
+          <TouchableOpacity
+            key={role.id}
+            onPress={() => setSelectedRole(role.id)}
+            className={`p-4 rounded-lg border-2 ${
+              selectedRole === role.id
+                ? 'border-blue-600 bg-blue-50'
+                : 'border-gray-300'
+            }`}
+          >
+            <Text className="text-3xl mb-2">{role.icon}</Text>
+            <Text className="text-lg font-bold">{role.label}</Text>
+          </TouchableOpacity>
+        ))}
+      </View>
+
+      <TouchableOpacity
+        onPress={handleSelectRole}
+        disabled={!selectedRole || loading}
+        className={`p-4 rounded-lg ${
+          selectedRole ? 'bg-blue-600' : 'bg-gray-300'
+        }`}
+      >
+        {loading ? (
+          <ActivityIndicator color="white" />
+        ) : (
+          <Text className="text-white text-center font-bold text-lg">
+            Continue
+          </Text>
+        )}
+      </TouchableOpacity>
+    </ScrollView>
+  );
+}
+ */
+
+
 // User selects their primary role
 // ==========================================
 

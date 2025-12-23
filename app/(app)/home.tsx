@@ -1,12 +1,14 @@
 import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
-import { trpc } from "../../lib/trpc";
+// import { trpc } from "../../lib/trpc";
 import { useAuth } from "../../hooks/useAuth";
 import { router } from "expo-router";
 
 export default function HomeScreen() {
   const { signOut } = useAuth();
-  const { data: user } = trpc.auth.me.useQuery();
+
+  const user={}
+  // const { data: user } = auth.me.useQuery();
 
   const handleSignOut = async () => {
     await signOut();

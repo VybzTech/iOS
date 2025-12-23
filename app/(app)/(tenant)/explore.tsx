@@ -37,26 +37,30 @@
 
 import { View, FlatList, Pressable, Text } from 'react-native';
 import { useRouter } from 'expo-router';
-import { trpc } from '@/lib/trpc';
+// import { trpc } from '@/lib/trpc';
 import PropertyCard from '@/components/(tenant)/PropertyCard';
-import Loader from '@/components/(ui)/Loader';
-import EmptyState from '@/components/(common)/EmptyState';
+// import Loader from '@/components/(ui)/Loader';
+// import EmptyState from '@/components/(common)/EmptyState';
 
 export default function ExploreScreen() {
   const router = useRouter();
-  const { data, isLoading, hasNextPage, fetchNextPage } = trpc.properties.getFeed.useInfiniteQuery(
-    { limit: 10 },
-    { getNextPageParam: (lastPage) => lastPage.nextCursor }
-  );
+  // const { data, isLoading, hasNextPage, fetchNextPage } = trpc.properties.getFeed.useInfiniteQuery(
+  //   { limit: 10 },
+  //   { getNextPageParam: (lastPage) => lastPage.nextCursor }
+  // );
 
-  if (isLoading) return <Loader />;
+  // if (isLoading) return <Loader />;
 
-  const properties = data?.pages.flatMap((page) => page.properties) ?? [];
+  const properties = [];
+  // const properties = data?.pages.flatMap((page) => page.properties) ?? [];
 
   return (
     <View style={{ flex: 1 }}>
       {properties.length === 0 ? (
-        <EmptyState title="No listings available" message="Check back soon!" />
+        <Text>
+          No listings available, Check back soon!
+        </Text>
+        // <EmptyState title="No listings available" message="Check back soon!" />
       ) : (
         <FlatList
           data={properties}
@@ -67,7 +71,8 @@ export default function ExploreScreen() {
             />
           )}
           keyExtractor={(item) => item.id}
-          onEndReached={() => hasNextPage && fetchNextPage()}
+          onEndReached={() => console.log("onEndReached")}
+          // onEndReached={() => hasNextPage && fetchNextPage()}
           onEndReachedThreshold={0.8}
           scrollEnabled={true}
         />

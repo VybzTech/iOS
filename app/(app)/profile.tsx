@@ -8,12 +8,13 @@ import {
   ActivityIndicator,
   Alert,
 } from "react-native";
-import { trpc } from "../../lib/trpc";
+// import { trpc } from "../../lib/trpc";
 import { useAuth } from "../../hooks/useAuth";
 
 export default function ProfileScreen() {
   const { signOut } = useAuth();
-  const { data: user, isLoading } = trpc.auth.me.useQuery();
+  const user={}
+  // const { data: user, isLoading } = trpc.auth.me.useQuery();
   // const updateMutation = trpc.auth.updateProfile.useMutation();
   const [name, setName] = useState(user?.name || "");
   const [role, setRole] = useState<"TENANT" | "LANDLORD">(
@@ -36,13 +37,13 @@ export default function ProfileScreen() {
     await signOut();
   };
 
-  if (isLoading) {
-    return (
-      <View style={styles.center}>
-        <ActivityIndicator size="large" color="#007AFF" />
-      </View>
-    );
-  }
+  // if (isLoading) {
+  //   return (
+  //     <View style={styles.center}>
+  //       <ActivityIndicator size="large" color="#007AFF" />
+  //     </View>
+  //   );
+  // }
 
   return (
     <View style={styles.container}>

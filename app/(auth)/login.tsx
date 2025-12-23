@@ -328,3 +328,107 @@ const styles = StyleSheet.create({
     fontWeight: "700",
   },
 });
+
+
+
+/* import { useState } from 'react';
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  ScrollView,
+  ActivityIndicator,
+} from 'react-native';
+import { useRouter } from 'expo-router';
+import { useAuthContext } from '@/context/AuthContext';
+
+export default function LoginScreen() {
+  const router = useRouter();
+  const { signUpWithEmail, signInWithGoogle } = useAuthContext();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  const handleEmailLogin = async () => {
+    try {
+      setLoading(true);
+      setError('');
+      await signUpWithEmail(email, password);
+      router.push('/(auth)/choose-role');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Login failed');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleGoogleLogin = async () => {
+    try {
+      setLoading(true);
+      setError('');
+      await signInWithGoogle();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Google login failed');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <ScrollView className="flex-1 bg-white px-4 py-8">
+      <Text className="text-3xl font-bold mb-8 text-center">Welcome</Text>
+
+      {error && (
+        <View className="bg-red-100 p-3 rounded-lg mb-4">
+          <Text className="text-red-800">{error}</Text>
+        </View>
+      )}
+
+      <TextInput
+        placeholder="Email"
+        value={email}
+        onChangeText={setEmail}
+        className="border border-gray-300 rounded-lg p-3 mb-3"
+        keyboardType="email-address"
+        editable={!loading}
+      />
+
+      <TextInput
+        placeholder="Password"
+        value={password}
+        onChangeText={setPassword}
+        secureTextEntry
+        className="border border-gray-300 rounded-lg p-3 mb-4"
+        editable={!loading}
+      />
+
+      <TouchableOpacity
+        onPress={handleEmailLogin}
+        disabled={loading}
+        className="bg-blue-600 p-3 rounded-lg mb-4"
+      >
+        {loading ? (
+          <ActivityIndicator color="white" />
+        ) : (
+          <Text className="text-white text-center font-bold">
+            Sign In with Email
+          </Text>
+        )}
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        onPress={handleGoogleLogin}
+        disabled={loading}
+        className="bg-gray-200 p-3 rounded-lg"
+      >
+        <Text className="text-center font-bold">Sign In with Google</Text>
+      </TouchableOpacity>
+    </ScrollView>
+  );
+}
+
+
+
+*/

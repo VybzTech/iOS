@@ -7,16 +7,19 @@
 //     </View>
 //   );
 // }
-import { trpc } from '@/lib/trpc';
+// import { trpc } from '@/lib/trpc';
 import { View, FlatList, ActivityIndicator, Text } from 'react-native';
 
 export default function HomeScreen() {
   // This calls: http://localhost:5000/api/trpc/properties.getFeed
-  const { data, isLoading, hasNextPage, fetchNextPage } = 
-    trpc.properties.getFeed.useInfiniteQuery(
-      { limit: 10 },
-      { getNextPageParam: (lastPage) => lastPage.nextCursor }
-    );
+  const data={}
+  var isLoading=false;
+
+  // const { data, isLoading, hasNextPage, fetchNextPage } = 
+  //   trpc.properties.getFeed.useInfiniteQuery(
+  //     { limit: 10 },
+  //     { getNextPageParam: (lastPage) => lastPage.nextCursor }
+  //   );
 
   if (isLoading) return <ActivityIndicator />;
 
@@ -27,7 +30,8 @@ export default function HomeScreen() {
         renderItem={({ item }) => (
           <Text key={item.id}>{item.title} - ${item.priceMonthly / 100}/mo</Text>
         )}
-        onEndReached={() => fetchNextPage()}
+        onEndReached={() => console.log("first")}
+        // onEndReached={() => fetchNextPage()}
       />
     </View>
   );

@@ -1,3 +1,100 @@
+/**
+ * 
+ * // mobile/src/app/(auth)/basic-info.tsx
+// ==========================================
+import { useState } from 'react';
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  ScrollView,
+  ActivityIndicator,
+} from 'react-native';
+import { useAuthContext } from '@/context/AuthContext';
+
+export default function BasicInfoScreen() {
+  const { completeOnboarding, user } = useAuthContext();
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  const handleComplete = async () => {
+    if (!firstName || !lastName) {
+      setError('Please fill in all fields');
+      return;
+    }
+
+    try {
+      setLoading(true);
+      setError('');
+      await completeOnboarding({
+        firstName,
+        lastName,
+        roles: user?.roles || ['TENANT'],
+      });
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to complete onboarding');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <ScrollView className="flex-1 bg-white px-4 py-8">
+      <Text className="text-2xl font-bold mb-2">Tell us about yourself</Text>
+      <Text className="text-gray-600 mb-6">
+        We need some basic information to get started
+      </Text>
+
+      {error && (
+        <View className="bg-red-100 p-3 rounded-lg mb-4">
+          <Text className="text-red-800">{error}</Text>
+        </View>
+      )}
+
+      <TextInput
+        placeholder="First Name"
+        value={firstName}
+        onChangeText={setFirstName}
+        className="border border-gray-300 rounded-lg p-3 mb-3"
+        editable={!loading}
+      />
+
+      <TextInput
+        placeholder="Last Name"
+        value={lastName}
+        onChangeText={setLastName}
+        className="border border-gray-300 rounded-lg p-3 mb-8"
+        editable={!loading}
+      />
+
+      <TouchableOpacity
+        onPress={handleComplete}
+        disabled={loading || !firstName || !lastName}
+        className={`p-4 rounded-lg ${
+          firstName && lastName ? 'bg-blue-600' : 'bg-gray-300'
+        }`}
+      >
+        {loading ? (
+          <ActivityIndicator color="white" />
+        ) : (
+          <Text className="text-white text-center font-bold text-lg">
+            Complete Onboarding
+          </Text>
+        )}
+      </TouchableOpacity>
+    </ScrollView>
+  );
+}
+ 
+ * 
+ * 
+ */
+
+
+
 // Collect user's basic information
 // ==========================================
 

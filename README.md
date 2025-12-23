@@ -1,4 +1,5 @@
 # Welcome to your Expo app 👋
+
 https://www.zoopla.co.uk/to-rent/
 https://www.manoafrica.com/
 
@@ -50,3 +51,35 @@ Join our community of developers creating universal apps.
 
 - [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
 - [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+
+# Constants.ts
+
+---
+
+Usage Examples:
+
+```typescript
+// In your components
+import { COLORS, SPACING, TYPOGRAPHY, APP_CONFIG } from "@/lib/constants";
+```
+
+### Use colors
+
+```jsx
+<View style={{ backgroundColor: COLORS.primary }}>
+  <Text style={{ color: COLORS.textOnPrimary }}>Hello</Text>
+</View>
+```
+
+#### Check tier features
+
+```jsx
+const canFavorite = APP_CONFIG.features[userTier].canFavorite;
+```
+
+#### Display tier info
+
+```jsx
+const tierData = TIER_INFO[user.tenantTier];
+The constants are all type-safe with as const assertions, so you'll get excellent autocomplete in your IDE! 🎨
+```

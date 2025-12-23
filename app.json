@@ -14,8 +14,8 @@
     "android": {
       "adaptiveIcon": {
         "backgroundColor": "#ffffff",
-        "foregroundImage": "./assets/images/onboarding/Onboarding-1.png",
-        "backgroundImage": "./assets/images/onboarding/Onboarding-1.png"
+        "foregroundImage": "./assets/images/ug-logo.png",
+        "backgroundImage": "./assets/images/ug-logo.png",
       },
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false

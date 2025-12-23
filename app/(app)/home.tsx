@@ -5,11 +5,11 @@ import { useAuth } from "../../hooks/useAuth";
 import { router } from "expo-router";
 
 export default function HomeScreen() {
-  // const { signOut } = useAuth();
+  const { signOut } = useAuth();
   const { data: user } = trpc.auth.me.useQuery();
 
   const handleSignOut = async () => {
-    // await signOut();
+    await signOut();
     router.replace("/(auth)/login");
   };
 

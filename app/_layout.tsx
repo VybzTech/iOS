@@ -1,279 +1,134 @@
-// // import { useEffect } from "react";
-// // import { Stack } from "expo-router";
-// // import { ClerkProvider } from "@clerk/clerk-expo";
-// // import { trpc, queryClient, trpcClient } from "@/lib/trpc";
-// // import { AuthProvider } from "@/context/AuthContext";
-// // import { QueryClientProvider } from "@tanstack/react-query";
-// // import * as SecureStore from "expo-secure-store";
+// import { useEffect, useState } from "react";
+// import { useFonts } from "expo-font";
+// import * as SplashScreen from "expo-splash-screen";
+// import { GestureHandlerRootView } from "react-native-gesture-handler";
+// import { useAuth } from "@/hooks/useAuth";
+// import { trpc } from "@/lib/trpc";
+// import { trpcClient } from "../lib/trpc";
+// import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+// import { Stack } from "expo-router";
 
-// // const getToken = async () => {
-// //   try {
-// //     const token = await SecureStore.getItemAsync("clerk_session");
-// //     return token;
-// //   } catch (err) {
-// //     return null;
-// //   }
-// // };
-
-// // export default function RootLayout() {
-// //   return (
-// //     <ClerkProvider
-// //       publishableKey={process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY}
-// //       tokenCache={{
-// //         getToken,
-// //         saveToken: (token) => SecureStore.setItemAsync("clerk_session", token),
-// //         clearToken: () => SecureStore.deleteItemAsync("clerk_session"),
-// //       }}
-// //     >
-// //       <QueryClientProvider client={queryClient}>
-// //         <trpc.Provider client={trpcClient} queryClient={queryClient}>
-// //           <AuthProvider>
-// //             <Stack screenOptions={{ headerShown: false }} />
-// //           </AuthProvider>
-// //         </trpc.Provider>
-// //       </QueryClientProvider>
-// //     </ClerkProvider>
-// //   );
-// // }
-
-// // import { useEffect } from 'react';
-// // import { Stack } from 'expo-router';
-// // import { ClerkProvider } from '@clerk/clerk-expo';
-// // import * as SecureStore from 'expo-secure-store';
-// // import * as SplashScreen from 'expo-splash-screen';
-// // import { useFonts } from '@/hooks/useFonts';
-// // import { trpc } from '@/lib/trpc';
-// // import { QueryClient } from '@tanstack/react-query';
-// // import { AuthProvider } from '@/context/AuthContext';
-
-// // // Keep splash visible while loading
-// // SplashScreen.preventAutoHideAsync();
-
-// // const tokenCache = {
-// //   async getToken(key: string) {
-// //     try {
-// //       return await SecureStore.getItemAsync(key);
-// //     } catch (err) {
-// //       console.error('SecureStore get error:', err);
-// //       return null;
-// //     }
-// //   },
-// //   async saveToken(key: string, value: string) {
-// //     try {
-// //       return await SecureStore.setItemAsync(key, value);
-// //     } catch (err) {
-// //       console.error('SecureStore save error:', err);
-// //     }
-// //   },
-// //   async clearToken(key: string) {
-// //     try {
-// //       return await SecureStore.deleteItemAsync(key);
-// //     } catch (err) {
-// //       console.error('SecureStore clear error:', err);
-// //     }
-// //   },
-// // };
-
-// // const queryClient = new QueryClient();
-
-// // export default function RootLayout() {
-// //   const fontsLoaded = useFonts();
-
-// //   useEffect(() => {
-// //     if (fontsLoaded) {
-// //       SplashScreen.hideAsync();
-// //     }
-// //   }, [fontsLoaded]);
-
-// //   if (!fontsLoaded) {
-// //     return null; // Keep splash showing
-// //   }
-
-// //   return (
-// //     <ClerkProvider
-// //       publishableKey={process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY || ''}
-// //       tokenCache={tokenCache}
-// //     >
-// //       {/* <trpc.Provider client={trpcClient} queryClient={queryClient}> */}
-// //       <trpc.Provider client={trpc.createClient({})} queryClient={queryClient}>
-// //         <AuthProvider>
-// //           <Stack screenOptions={{ headerShown: false }} />
-// //           </AuthProvider>
-// //       </trpc.Provider>
-// //     </ClerkProvider>
-// //   );
-// // }
-
-// // File: mobile/app/_layout.tsx
-// import { useEffect } from 'react';
-// import { Stack } from 'expo-router';
-// import { ClerkProvider } from '@clerk/clerk-expo';
-// import * as SecureStore from 'expo-secure-store';
-// import * as SplashScreen from 'expo-splash-screen';
-// import { useFonts } from '@/hooks/useFonts';
-// import { QueryClient } from '@tanstack/react-query';
-// import { trpc } from '@/lib/trpc';
-
-// // Keep splash visible while loading
+// // Keep splash screen visible until we're done loading
 // SplashScreen.preventAutoHideAsync();
 
-// const tokenCache = {
-//   async getToken(key: string) {
-//     try {
-//       const token = await SecureStore.getItemAsync(key);
-//       return token;
-//     } catch (err) {
-//       console.error('🔴 SecureStore get error:', err);
-//       return null;
-//     }
-//   },
-//   async saveToken(key: string, value: string) {
-//     try {
-//       await SecureStore.setItemAsync(key, value);
-//     } catch (err) {
-//       console.error('🔴 SecureStore save error:', err);
-//     }
-//   },
-//   async clearToken(key: string) {
-//     try {
-//       await SecureStore.deleteItemAsync(key);
-//     } catch (err) {
-//       console.error('🔴 SecureStore clear error:', err);
-//     }
-//   },
-// };
-
-// const queryClient = new QueryClient({
-//   defaultOptions: {
-//     queries: {
-//       retry: 3,
-//       staleTime: 1000 * 60 * 5,
-//       gcTime: 1000 * 60 * 10,
-//     },
-//   },
-// });
+// const queryClient = new QueryClient();
 
 // export default function RootLayout() {
-//   const fontsLoaded = useFonts();
+//   const { isLoading, isSignedIn } = useAuth();
+//   const [fontsLoaded] = useFonts({
+//     "HubotSans-Medium": require("@/assets/fonts/HubotSans-Medium.ttf"),
+//     "HubotSans-Regular": require("@/assets/fonts/HubotSans-Regular.ttf"),
+//   });
 
 //   useEffect(() => {
-//     if (fontsLoaded) {
-//       console.log('✅ Fonts loaded, hiding splash');
+//     if (fontsLoaded && !isLoading) {
 //       SplashScreen.hideAsync();
 //     }
-//   }, [fontsLoaded]);
+//   }, [fontsLoaded, isLoading]);
 
-//   if (!fontsLoaded) {
-//     return null; // Show splash screen while fonts load
-//   }
-
-//   const publishableKey = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY;
-
-//   if (!publishableKey) {
-//     throw new Error(
-//       '❌ Missing EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY in .env.local'
-//     );
+//   if (isLoading || !fontsLoaded) {
+//     return null;
 //   }
 
 //   return (
-//     <ClerkProvider publishableKey={publishableKey} tokenCache={tokenCache}>
-//       <trpc.Provider
-//         client={trpc.createClient({
-//           links: [
-//             // Add your tRPC link here if needed
-//           ],
-//         })}
-//         queryClient={queryClient}
-//       >
-//         <Stack screenOptions={{ headerShown: false }} />
-//       </trpc.Provider>
-//     </ClerkProvider>
-//   );
-// }
-
-// import { useEffect } from 'react';
-// import { Stack } from 'expo-router';
-// import { AuthProvider } from '../context/AuthContext';
-// import { useAuth } from '../hooks/useAuth';
-// import { trpc, trpcClient, queryClient } from '../lib/trpc';
-
-// function RootLayoutNav() {
-//   const { session, isLoading } = useAuth();
-
-//   if (isLoading) {
-//     return <Stack />;
-//   }
-
-//   return (
-//     <Stack>
-//       {session ? (
-//         <Stack.Screen
-//           name="(app)"
-//           options={{ headerShown: false }}
-//         />
-//       ) : (
-//         <Stack.Screen
-//           name="(auth)"
-//           options={{ headerShown: false }}
-//         />
-//       )}
-//     </Stack>
-//   );
-// }
-
-// export default function RootLayout() {
-//   return (
-//     <AuthProvider>
-//       {/* ✅ Wrap entire app with tRPC provider */}
+//     <GestureHandlerRootView style={{ flex: 1 }}>
 //       <trpc.Provider client={trpcClient} queryClient={queryClient}>
-//         <RootLayoutNav />
+//         <QueryClientProvider client={queryClient}>
+//           <Stack screenOptions={{ headerShown: false }}>
+//             {isSignedIn ? (
+//               // User is authenticated - show app
+//               <Stack.Screen name="(app)" />
+//             ) : (
+//               // User is not authenticated - show auth screens
+//               <Stack.Screen name="(auth)" />
+//             )}
+//           </Stack>
+//         </QueryClientProvider>
 //       </trpc.Provider>
-//     </AuthProvider>
+//     </GestureHandlerRootView>
 //   );
 // }
 
-import { useEffect } from "react";
-import { Stack } from "expo-router";
+import { useEffect, useState } from "react";
+import { useFonts } from "expo-font";
+import * as SplashScreen from "expo-splash-screen";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { AuthProvider } from "../context/AuthContext";
-import { useAuth } from "../hooks/useAuth";
-import { trpc, trpcClient } from "../lib/trpc";
-import * as Linking from "expo-linking";
+import { View, Image } from "react-native";
+import { useAuth } from "@/hooks/useAuth";
+import { trpc, trpcClient } from "@/lib/trpc";
+import { Stack } from "expo-router";
 
-const queryClient = new QueryClient();
+SplashScreen.preventAutoHideAsync();
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: 1,
+      staleTime: 1000 * 60 * 5,
+      gcTime: 1000 * 60 * 10,
+    },
+  },
+});
 
 function RootLayoutNav() {
-  const { session, isLoading } = useAuth();
+  const { isLoading, isSignedIn, shouldShowOnboarding } = useAuth();
+  const [fontsLoaded] = useFonts({
+    "HubotSans-Medium": require("@/assets/fonts/HubotSans-Medium.ttf"),
+    "HubotSans-Regular": require("@/assets/fonts/HubotSans-Regular.ttf"),
+  });
 
   useEffect(() => {
-    // Handle deep links from Supabase OAuth
-    const handleDeepLink = ({ url }: { url: string }) => {
-      const route = url.replace(/.*?:\/\//g, "");
-      const routeName = route.split("/")[0];
+    if (fontsLoaded && !isLoading) {
+      setTimeout(() => SplashScreen.hideAsync(), 3000);
+    }
+  }, [fontsLoaded, isLoading]);
 
-      if (routeName === "auth") {
-        // Extract token from URL if needed
-        console.log("Auth deep link received:", url);
-      }
-    };
-
-    const subscription = Linking.addEventListener("url", handleDeepLink);
-
-    return () => {
-      subscription.remove();
-    };
-  }, []);
-
-  if (isLoading) {
-    return <Stack />;
+  // Show splash screen while loading
+  if (isLoading || !fontsLoaded) {
+    return (
+      <View
+        style={{
+          flex: 1,
+          justifyContent: "center",
+          alignItems: "center",
+          backgroundColor: "#fff",
+        }}
+      >
+        <Image
+          source={require("@/assets/images/ug-logo.png")}
+          style={{ width: 70, height: 70 }}
+        />
+      </View>
+    );
   }
 
+  // Render based on auth state
+  if (isSignedIn) {
+    return (
+      <Stack screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="(app)" />
+      </Stack>
+    );
+  }
+
+  // Not signed in - show auth screens
   return (
-    <Stack>
-      {session ? (
-        <Stack.Screen name="(app)" options={{ headerShown: false }} />
+    <Stack screenOptions={{ headerShown: false }}>
+      {shouldShowOnboarding ? (
+        <Stack.Screen
+          name="(auth)"
+          options={{
+            initialRouteName: "onboarding",
+          }}
+        />
       ) : (
-        <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+        <Stack.Screen
+          name="(auth)"
+          options={{
+            initialRouteName: "login",
+          }}
+        />
       )}
     </Stack>
   );
@@ -281,12 +136,12 @@ function RootLayoutNav() {
 
 export default function RootLayout() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <trpc.Provider client={trpcClient} queryClient={queryClient}>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <trpc.Provider client={trpcClient} queryClient={queryClient}>
+        <QueryClientProvider client={queryClient}>
           <RootLayoutNav />
-        </trpc.Provider>
-      </AuthProvider>
-    </QueryClientProvider>
+        </QueryClientProvider>
+      </trpc.Provider>
+    </GestureHandlerRootView>
   );
 }
